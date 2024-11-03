@@ -1,0 +1,84 @@
+#-*-coding:utf-8;-*-
+from ctypes import CDLL,CFUNCTYPE,c_char_p,c_int,c_ubyte,c_uint16,c_uint32,c_uint8,c_void_p,POINTER
+from json import load
+from os.path import dirname,join
+from sys import maxsize
+if maxsize>0x100000000:
+    LIBRARY=CDLL(load(open(join(dirname(__file__),"config.json"),"r",encoding="utf-8"))["x64"])
+else:
+    LIBRARY=CDLL(load(open(join(dirname(__file__),"config.json"),"r",encoding="utf-8"))["x86"])
+rtlsdr_read_async_cb_t=CFUNCTYPE(None,POINTER(c_ubyte),c_uint32,c_void_p)
+LIBRARY.rtlsdr_get_device_count.argtypes=()
+LIBRARY.rtlsdr_get_device_count.restype=c_uint32
+LIBRARY.rtlsdr_get_device_name.argtypes=(c_uint32,)
+LIBRARY.rtlsdr_get_device_name.restype=c_char_p
+LIBRARY.rtlsdr_get_device_usb_strings.argtypes=(c_uint32,c_char_p,c_char_p,c_char_p)
+LIBRARY.rtlsdr_get_device_usb_strings.restype=c_int
+LIBRARY.rtlsdr_get_index_by_serial.argtypes=(c_char_p,)
+LIBRARY.rtlsdr_get_index_by_serial.restype=c_int
+LIBRARY.rtlsdr_open.argtypes=(POINTER(c_void_p),c_uint32)
+LIBRARY.rtlsdr_open.restype=c_int
+LIBRARY.rtlsdr_close.argtypes=(c_void_p,)
+LIBRARY.rtlsdr_close.restype=c_int
+LIBRARY.rtlsdr_set_xtal_freq.argtypes=(c_void_p,c_uint32,c_uint32)
+LIBRARY.rtlsdr_set_xtal_freq.restype=c_int
+LIBRARY.rtlsdr_get_xtal_freq.argtypes=(c_void_p,POINTER(c_uint32),POINTER(c_uint32))
+LIBRARY.rtlsdr_get_xtal_freq.restype=c_int
+LIBRARY.rtlsdr_get_usb_strings.argtypes=(c_void_p,c_char_p,c_char_p,c_char_p)
+LIBRARY.rtlsdr_get_usb_strings.restype=c_int
+LIBRARY.rtlsdr_write_eeprom.argtypes=(c_void_p,POINTER(c_uint8),c_uint8,c_uint16)
+LIBRARY.rtlsdr_write_eeprom.restype=c_int
+LIBRARY.rtlsdr_read_eeprom.argtypes=(c_void_p,POINTER(c_uint8),c_uint8,c_uint16)
+LIBRARY.rtlsdr_read_eeprom.restype=c_int
+LIBRARY.rtlsdr_set_center_freq.argtypes=(c_void_p,c_uint32)
+LIBRARY.rtlsdr_set_center_freq.restype=c_int
+LIBRARY.rtlsdr_get_center_freq.argtypes=(c_void_p,)
+LIBRARY.rtlsdr_get_center_freq.restype=c_uint32
+LIBRARY.rtlsdr_set_freq_correction.argtypes=(c_void_p,c_int)
+LIBRARY.rtlsdr_set_freq_correction.restype=c_int
+LIBRARY.rtlsdr_get_freq_correction.argtypes=(c_void_p,)
+LIBRARY.rtlsdr_get_freq_correction.restype=c_int
+LIBRARY.rtlsdr_get_tuner_type.argtypes=(c_void_p,)
+LIBRARY.rtlsdr_get_tuner_type.restype=c_int
+LIBRARY.rtlsdr_get_tuner_gains.argtypes=(c_void_p,POINTER(c_int))
+LIBRARY.rtlsdr_get_tuner_gains.restype=c_int
+LIBRARY.rtlsdr_set_tuner_gain.argtypes=(c_void_p,c_int)
+LIBRARY.rtlsdr_set_tuner_gain.restype=c_int
+LIBRARY.rtlsdr_set_tuner_bandwidth.argtypes=(c_void_p,c_uint32)
+LIBRARY.rtlsdr_set_tuner_bandwidth.restype=c_int
+LIBRARY.rtlsdr_get_tuner_gain.argtypes=(c_void_p,)
+LIBRARY.rtlsdr_get_tuner_gain.restype=c_int
+LIBRARY.rtlsdr_set_tuner_if_gain.argtypes=(c_void_p,c_int,c_int)
+LIBRARY.rtlsdr_set_tuner_if_gain.restype=c_int
+LIBRARY.rtlsdr_set_tuner_gain_mode.argtypes=(c_void_p,c_int)
+LIBRARY.rtlsdr_set_tuner_gain_mode.restype=c_int
+LIBRARY.rtlsdr_set_sample_rate.argtypes=(c_void_p,c_uint32)
+LIBRARY.rtlsdr_set_sample_rate.restype=c_int
+LIBRARY.rtlsdr_get_sample_rate.argtypes=(c_void_p,)
+LIBRARY.rtlsdr_get_sample_rate.restype=c_uint32
+LIBRARY.rtlsdr_set_testmode.argtypes=(c_void_p,c_int)
+LIBRARY.rtlsdr_set_testmode.restype=c_int
+LIBRARY.rtlsdr_set_agc_mode.argtypes=(c_void_p,c_int)
+LIBRARY.rtlsdr_set_agc_mode.restype=c_int
+LIBRARY.rtlsdr_set_direct_sampling.argtypes=(c_void_p,c_int)
+LIBRARY.rtlsdr_set_direct_sampling.restype=c_int
+LIBRARY.rtlsdr_get_direct_sampling.argtypes=(c_void_p,)
+LIBRARY.rtlsdr_get_direct_sampling.restype=c_int
+LIBRARY.rtlsdr_set_offset_tuning.argtypes=(c_void_p,c_int)
+LIBRARY.rtlsdr_set_offset_tuning.restype=c_int
+LIBRARY.rtlsdr_get_offset_tuning.argtypes=(c_void_p,)
+LIBRARY.rtlsdr_get_offset_tuning.restype=c_int
+LIBRARY.rtlsdr_reset_buffer.argtypes=(c_void_p,)
+LIBRARY.rtlsdr_reset_buffer.restype=c_int
+LIBRARY.rtlsdr_read_sync.argtypes=(c_void_p,c_void_p,c_int,POINTER(c_int))
+LIBRARY.rtlsdr_read_sync.restype=c_int
+LIBRARY.rtlsdr_wait_async.argtypes=(c_void_p,rtlsdr_read_async_cb_t,c_void_p)
+LIBRARY.rtlsdr_wait_async.restype=c_int
+LIBRARY.rtlsdr_read_async.argtypes=(c_void_p,rtlsdr_read_async_cb_t,c_void_p,c_uint32,c_uint32)
+LIBRARY.rtlsdr_read_async.restype=c_int
+LIBRARY.rtlsdr_cancel_async.argtypes=(c_void_p,)
+LIBRARY.rtlsdr_cancel_async.restype=c_int
+LIBRARY.rtlsdr_set_bias_tee.argtypes=(c_void_p,c_int)
+LIBRARY.rtlsdr_set_bias_tee.restype=c_int
+LIBRARY.rtlsdr_set_bias_tee_gpio.argtypes=(c_void_p,c_int,c_int)
+LIBRARY.rtlsdr_set_bias_tee_gpio.restype=c_int
